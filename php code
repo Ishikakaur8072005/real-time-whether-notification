@@ -1,0 +1,90 @@
+<?php
+header('Content-Type: application/json');
+
+// Database configuration
+$host = 'localhost'; // Database host
+$db_name = 'POSTMAN'; // Database name
+$username = 'root'; // Database username
+$password = ''; // Database password
+
+// Create connection
+$conn = new mysqli($host, $username, $password, $db_name);
+
+// Check connection
+if ($conn->connect_error) {
+    echo json_encode(['error' => 'Database connection failed: ' . $conn->connect_error]);
+    exit;
+}
+
+// Get the city name from POST request
+$city_name = isset($_POST['city_name']) ? $conn->real_escape_string($_POST['city_name']) : '';
+
+if (empty($city_name)) {
+    echo json_encode(['error' => 'City name is required']);
+    exit;
+}
+
+// Fetch new data from the weather API (This is where you can call your weather API)
+// Sample weather data for demonstration
+$weather_data = [
+    'temperature' => rand(15, 35), // Random temperature between 15 and 35
+    'CONDITIONs' => 'Sunny', // Sample condition
+    'rain_chance' => rand(0, 100), // Random rain chance between 0 and 100
+    'wind_speed' => rand(0, 20), // Random wind speed between 0 and 20 km/h
+    'humidity' => rand(20, 100), // Random humidity percentage between 20 and 100
+    'visibility' => rand(5, 15), // Random visibility between 5 and 15 km
+    'pressure' => rand(950, 1050) // Random pressure between 950 and 1050 hPa
+];
+
+// Check if the data already exists in the database
+$stmt = $conn->prepare("SELECT * FROM weather_searches WHERE city_name = ? AND temperature = ? AND CONDITIONs = ? AND rain_chance = ? AND wind_speed = ? AND humidity = ? AND visibility = ? AND pressure = ?");
+$stmt->bind_param("sdsdidsd", 
+    $city_name, 
+    $weather_data['temperature'], 
+    $weather_data['CONDITIONs'], 
+    $weather_data['rain_chance'], 
+    $weather_data['wind_speed'], 
+    $weather_data['humidity'], 
+    $weather_data['visibility'], 
+    $weather_data['pressure']
+);
+$stmt->execute();
+$result = $stmt->get_result();
+$data = $result->fetch_assoc();
+
+if ($data) {
+    // If the exact data already exists, return it
+    echo json_encode($data);
+} else {
+    // If data doesn't exist, insert new data into the database
+    $stmt = $conn->prepare("INSERT INTO weather_searches (city_name, temperature, CONDITIONs, rain_chance, wind_speed, humidity, visibility, pressure) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sdsdidsd", 
+        $city_name, 
+        $weather_data['temperature'], 
+        $weather_data['CONDITIONs'], 
+        $weather_data['rain_chance'], 
+        $weather_data['wind_speed'], 
+        $weather_data['humidity'], 
+        $weather_data['visibility'], 
+        $weather_data['pressure']
+    );
+    $stmt->execute();
+
+    // Return the newly inserted data
+    $data = [
+        'city_name' => $city_name,
+        'temperature' => $weather_data['temperature'],
+        'condition' => $weather_data['CONDITIONs'],
+        'rain_chance' => $weather_data['rain_chance'],
+        'wind_speed' => $weather_data['wind_speed'],
+        'humidity' => $weather_data['humidity'],
+        'visibility' => $weather_data['visibility'],
+        'pressure' => $weather_data['pressure']
+    ];
+
+    echo json_encode($data);
+}
+
+$stmt->close();
+$conn->close();
+?>
