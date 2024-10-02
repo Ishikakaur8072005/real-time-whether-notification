@@ -8,11 +8,8 @@ FEATURES
 -> User-friendly interface for displaying weather information.
 
 TECHNOLOGIES USED
--> Frontend: 
--> Backend: 
--> API:
--> Other Tools: (e.g., Postman for API testing)
+-> Frontend: HTML,CSS ,Javascript 
+-> Backend: php
+-> API: rapid api
+-> Other Tools: Postman for API testing
 
-PREREQUISITES
--> Node.js installed on your machine
--> API Key from [Weather API] (e.g., OpenWeatherMap) 
