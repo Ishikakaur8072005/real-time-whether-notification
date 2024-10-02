@@ -5,35 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
+         body {
+        font-family: Arial, sans-serif;
+        background-image: url('background.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin: 0;
+        padding: 0;
+        height: 100vh; /* Ensure the body takes the full height of the viewport */
+    }
 
-        .container {
+        
+    .container {
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            display: flex; 
-            justify-content: center; 
+            display: flex; /* Change to flex */
+            justify-content: center; /* Center contents horizontally */
             padding: 20px;
+            box-shadow: rgba(0, 0, 0, 0.5);
         }
-
         .main-weather {
-            background-color: #fff;
+            background-color: #e4e2eb;
             border-radius: 20px;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 2px 4px 8px rgba(0, 0, 0, 10);
             position: relative;
-            width: 100%; 
-            max-width: 600px;
+            width: 100%; /* Take full width of the parent */
+            max-width: 600px; /* Optional: set a max-width for the card */
         }
-
         .input-container {
             margin: 20px;
             position: relative;
@@ -87,12 +91,14 @@
         }
 
         .highlights {
+            width: 400px;
             background-color: #fff;
             border-radius: 20px;
             padding: 20px;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
+            border: 2px solid #d3cfcf;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
@@ -101,6 +107,7 @@
             padding: 20px;
             border-radius: 15px;
             text-align: center;
+            box-shadow:  2px 2px 2px #F7C84B;
         }
 
         .highlight-card p {
